@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2389db0c-6018-4648-ac09-1964650eefa5/deploy-status)](https://app.netlify.com/projects/pullox-online/deploys)
 
-Personal site of Alexandros Kotzegien Ã¢â‚¬â€ https://www.pullox.online (EN) and https://www.pullox.online/bg/ (BG).
+Personal site of Alexandros Kotzegien ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â https://www.pullox.online (EN) and https://www.pullox.online/bg/ (BG).
 
 Static HTML/CSS built by a small Node script, hosted on Netlify. Every push to `main` deploys automatically.
 
@@ -16,10 +16,10 @@ Static HTML/CSS built by a small Node script, hosted on Netlify. Every push to `
 | Design (colours, grid, tiles, responsive) | `src/styles.css` |
 | Client-side JS (pipeline animation, GitHub tile, form) | `public/app.js` |
 | Images (photo, warehouse map), fonts, favicon, OG image | `public/` |
-| Contact form Ã¢â€ â€™ Resend | `netlify/functions/contact.mts` |
-| GitHub tile data (daily sync Ã¢â€ â€™ Netlify Blobs, served at `/api/github`) | `netlify/functions/github*.mts`, `netlify/lib/github.mts` |
+| Contact form ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Resend | `netlify/functions/contact.mts` |
+| GitHub tile data (daily sync ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Netlify Blobs, served at `/api/github`) | `netlify/functions/github*.mts`, `netlify/lib/github.mts` |
 
-`{{TODO: Ã¢â‚¬Â¦}}` in the copy renders as a visible dashed chip, so open items can't be missed.
+`{{TODO: ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦}}` in the copy renders as a visible dashed chip, so open items can't be missed.
 
 ## Local build
 
@@ -32,18 +32,19 @@ npx serve dist        # or any static server
 ## Rules (from the build brief)
 
 - Never publish: phone, date of birth, email address, home address, salary, M365 tenant domain, ClickUp/Dataverse IDs, BioPharma colleagues' names, internal decision numbers, homelab IPs/hostnames.
-- Don't mention Glowy Secrets, Cobacco, Brave New Hair, Vitalicco, or media-server software (media = "a hobby").
+- Don't mention Alex's other brands or businesses (the list is in his private build brief), or media-server software (media = "a hobby").
+- Commit as `puloxtor <101748823+puloxtor@users.noreply.github.com>` (GitHub noreply), never a personal email: the repo is public.
 - Xbox and Google Workspace roles: name the product and the role, never "at Microsoft/Google" or the partner company.
 - No cookies, no third-party trackers. Screenshots of internal systems: blur client codes and client names.
 - No numbers Alex hasn't given.
 
-## Environment variables (Netlify Ã¢â€ â€™ Project configuration Ã¢â€ â€™ Environment variables)
+## Environment variables (Netlify ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Project configuration ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Environment variables)
 
 `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`, `GITHUB_TOKEN` (classic, `read:user`), optional `CF_BEACON_TOKEN` (Cloudflare Web Analytics). They are secrets: never hard-code their values (Netlify's secret scanner fails the build).
 
 ## DNS
 
-`pullox.online` is on Cloudflare. Apex Ã¢â€ â€™ CNAME `apex-loadbalancer.netlify.com`, `www` Ã¢â€ â€™ CNAME `pullox-online.netlify.app`, both DNS-only. Other subdomains run through the homelab Cloudflare tunnel Ã¢â‚¬â€ don't touch them.
+`pullox.online` is on Cloudflare. Apex ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ CNAME `apex-loadbalancer.netlify.com`, `www` ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ CNAME `pullox-online.netlify.app`, both DNS-only. Other subdomains run through the homelab Cloudflare tunnel ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â don't touch them.
 
 ## Deploying
 
