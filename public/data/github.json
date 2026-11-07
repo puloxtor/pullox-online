@@ -1,0 +1,9 @@
+{
+  "updatedAt": null,
+  "total": null,
+  "weeks": [],
+  "repos": [
+    { "name": "sheets-mcp-server", "url": "https://github.com/puloxtor/sheets-mcp-server", "pushedAt": null },
+    { "name": "shopify-mcp-multiaccount", "url": "https://github.com/puloxtor/shopify-mcp-multiaccount", "pushedAt": null }
+  ]
+}

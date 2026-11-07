@@ -1,0 +1,17 @@
+{
+  "name": "pullox-online",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.8",
+    "@netlify/functions": "^6.1.1"
+  }
+}
