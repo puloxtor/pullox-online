@@ -41,6 +41,16 @@ const brand = (slug, size = 14) => {
 const MCP_ICONS = ['', 'googlesheets', '', 'googleads', 'shopify', ''];
 const STACK = [['Microsoft Dataverse / Power Platform', ''], ['SharePoint', ''], ['Claude agents', 'claude'], ['Custom MCP servers', ''], ['Railway', 'railway'], ['Postgres', 'postgresql']];
 
+// Results: one string in content.mjs, "N label · N label · …". Rendered as figures (number + label).
+// The number is everything before the first normal space, so "1\u00A0600+" stays in one piece.
+const resultStats = (t) => {
+  const r = t.bio.resultsTodo;
+  if (!r || isTodo(r)) return '';
+  const items = r.split(' · ').map((x) => { const i = x.indexOf(' '); return [x.slice(0, i), x.slice(i + 1)]; });
+  return `<div class="results"><h3 class="sr">${esc(t.bio.results)}</h3><dl class="results__list">${items
+    .map(([n, l]) => `<div><dt>${esc(l)}</dt><dd>${esc(n)}</dd></div>`).join('')}</dl></div>`;
+};
+
 const label = (path) => `<p class="label">~/${path}</p>`;
 
 function page(t) {
@@ -172,9 +182,10 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
       </div>
     </div>
     <p class="bio__plus">${esc(t.bio.plus)}</p>
+    ${resultStats(t)}
     <div class="bio__foot">
       <ul class="stack" role="list">${STACK.map(([s, i]) => `<li>${brand(i, 13)}${s}</li>`).join('')}</ul>
-      ${HIDE_TODO && isTodo(t.bio.resultsTodo) ? '' : `<p class="bio__results"><span>${esc(t.bio.results)}</span> ${txt(t.bio.resultsTodo)}</p>`}
+      ${isTodo(t.bio.resultsTodo) && !HIDE_TODO ? `<p class="bio__results"><span>${esc(t.bio.results)}</span> ${txt(t.bio.resultsTodo)}</p>` : ''}
     </div>
   </section>
 

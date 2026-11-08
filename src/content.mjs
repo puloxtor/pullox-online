@@ -57,7 +57,7 @@ const en = {
     human: 'New items, permissions and deactivations go to a human',
     plus: 'Plus a warehouse map and a production-control register.',
     results: 'Results',
-    resultsTodo: '{{TODO: 2–3 public numbers from Alex — e.g. users, records per week, hours saved}}',
+    resultsTodo: '1,600+ storage locations mapped · 1,800 lots tracked to the shelf · 300+ ERP records written by the agent in its first month',
   },
   mcp: {
     title: 'MCP servers',
@@ -171,7 +171,7 @@ const bg = {
     human: 'Нови артикули, права и деактивации стигат до човек',
     plus: 'Плюс карта на склада и регистър за производствен контрол.',
     results: 'Резултати',
-    resultsTodo: '{{TODO: 2–3 public numbers from Alex — e.g. users, records per week, hours saved}}',
+    resultsTodo: '1\u00A0600+ места в склада на картата · 1\u00A0800 партиди, всяка с точното си място · 300+ записа в ERP от агента за първия месец',
   },
   mcp: {
     title: 'MCP сървъри',
