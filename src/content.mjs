@@ -44,7 +44,7 @@ const en = {
     sub: 'Commercial Director & Chief AI Officer at BioPharma Laboratories. I turn how a company works into systems — and lately, into AI agents that do the work.',
     cta: 'Get in touch',
   },
-  now: { text: 'Building an AI-run warehouse and production system for a cosmetics factory.', place: 'Plovdiv, Bulgaria' },
+  now: { title: 'Now', text: 'Building an AI-run warehouse and production system for a cosmetics factory.', place: 'Plovdiv, Bulgaria' },
   bio: {
     title: 'AI agents that run a factory',
     context:
@@ -93,6 +93,7 @@ const en = {
     title: 'Warehouse map',
     text: 'Every storage place across three warehouses with stock, lots and expiry dates. Search by code, item, client, lot or address, and open any record in Power Apps.',
     alt1: 'Warehouse map: a grid of storage places with stock per place and a detail panel for one item',
+    open: 'Open the screenshot full size',
     alt2: 'Warehouse map search: matching storage places highlighted in orange',
   },
   career: {
@@ -157,7 +158,7 @@ const bg = {
     sub: 'Търговски директор и Chief AI Officer в BioPharma Laboratories. Превръщам начина, по който работи една фирма, в системи — а напоследък и в AI агенти, които вършат работата.',
     cta: 'Пиши ми',
   },
-  now: { text: 'Изграждам склад и производство, управлявани от AI, за фабрика за козметика.', place: 'Пловдив, България' },
+  now: { title: 'Сега', text: 'Изграждам склад и производство, управлявани от AI, за фабрика за козметика.', place: 'Пловдив, България' },
   bio: {
     title: 'AI агенти, които движат фабрика',
     context:
@@ -206,6 +207,7 @@ const bg = {
     title: 'Карта на складовете',
     text: 'Всяко складово място в трите склада с наличност, лотове и срокове на годност. Търсене по код, артикул, клиент, лот или адрес и отваряне на всеки запис в Power Apps.',
     alt1: 'Карта на склада: мрежа от складови места с наличности и панел с детайли за артикул',
+    open: 'Отвори снимката в пълен размер',
     alt2: 'Търсене в картата на склада: намерените места са оцветени в оранжево',
   },
   career: {

@@ -12,10 +12,15 @@ cpSync('public', OUT, { recursive: true });
 
 const css = readFileSync('src/styles.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s*\n\s*/g, '\n');
 const cfToken = process.env.CF_BEACON_TOKEN || '';
+// Netlify sets CONTEXT=production for the live site. There, open {{TODO}} items are dropped instead of shown;
+// deploy previews and local builds still render them as dashed chips. Set SHOW_TODO=1 to force them on.
+const HIDE_TODO = process.env.CONTEXT === 'production' && process.env.SHOW_TODO !== '1';
+const TODO_RE = /\{\{TODO:?\s*([\s\S]*?)\}\}/g;
+const isTodo = (s) => /\{\{TODO/.test(String(s));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // Render {{TODO: …}} placeholders as visible chips so they can't be missed in review.
-const txt = (s) => esc(s).replace(/\{\{TODO:?\s*([\s\S]*?)\}\}/g, '<mark class="todo">{{TODO: $1}}</mark>');
+const txt = (s) => (HIDE_TODO ? esc(String(s).replace(TODO_RE, '')).trim() : esc(s).replace(TODO_RE, '<mark class="todo">{{TODO: $1}}</mark>'));
 
 const icon = (id, size = 18) =>
   `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" focusable="false"><path d="${ICONS[id]}"/></svg>`;
@@ -80,6 +85,7 @@ function page(t) {
 <meta property="og:image" content="${SITE.url}/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(t.title)}">
 <meta property="og:locale" content="${t.locale}">
 <meta property="og:locale:alternate" content="${other.locale}">
 <meta name="twitter:card" content="summary_large_image">
@@ -91,6 +97,7 @@ function page(t) {
     jobTitle: 'Commercial Director & Chief AI Officer',
     worksFor: { '@type': 'Organization', name: 'BioPharma Laboratories' },
     address: { '@type': 'PostalAddress', addressLocality: 'Plovdiv', addressCountry: 'BG' },
+    knowsAbout: LANGS.en.skills.list,
     sameAs: SITE.social.filter((s) => s.id !== 'x' || SITE.showX).map((s) => s.href),
   })}</script>
 <style>${css}</style>
@@ -126,7 +133,7 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
     </div>
   </section>
 
-  <section class="tile tile--now" aria-label="Now">
+  <section class="tile tile--now" aria-label="${esc(t.now.title)}">
     ${label('now')}
     <p class="now__text"><span class="pulse" aria-hidden="true"></span>${esc(t.now.text)}</p>
     <p class="now__place">${esc(t.now.place)}</p>
@@ -158,7 +165,7 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
     </div>
     <div class="pipe" data-pipe>
       <button class="pipe__pause" type="button" data-pause aria-pressed="false" data-on="${t.lang === 'bg' ? 'Пауза' : 'Pause'}" data-off="${t.lang === 'bg' ? 'Пусни' : 'Play'}">${t.lang === 'bg' ? 'Пауза' : 'Pause'}</button>
-      <ol class="pipe__steps" role="list"><span class="pipe__pulse" aria-hidden="true"></span>${steps}</ol>
+      <div class="pipe__rail"><span class="pipe__pulse" aria-hidden="true"></span><ol class="pipe__steps" role="list">${steps}</ol></div>
       <div class="pipe__fork">
         <p class="fork fork--auto"><span aria-hidden="true">●</span>${esc(t.bio.auto)}</p>
         <p class="fork fork--human"><span aria-hidden="true">○</span>${esc(t.bio.human)}</p>
@@ -167,7 +174,7 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
     <p class="bio__plus">${esc(t.bio.plus)}</p>
     <div class="bio__foot">
       <ul class="stack" role="list">${STACK.map(([s, i]) => `<li>${brand(i, 13)}${s}</li>`).join('')}</ul>
-      <p class="bio__results"><span>${esc(t.bio.results)}</span> ${txt(t.bio.resultsTodo)}</p>
+      ${HIDE_TODO && isTodo(t.bio.resultsTodo) ? '' : `<p class="bio__results"><span>${esc(t.bio.results)}</span> ${txt(t.bio.resultsTodo)}</p>`}
     </div>
   </section>
 
@@ -178,8 +185,8 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
       <p class="tile__text">${esc(t.map.text)}</p>
     </div>
     <div class="map__shots">
-      <figure class="shot"><img src="/img/map.webp" width="1239" height="760" loading="lazy" decoding="async" alt="${esc(t.map.alt1)}"></figure>
-      <figure class="shot"><img src="/img/map-search.webp" width="1374" height="920" loading="lazy" decoding="async" alt="${esc(t.map.alt2)}"></figure>
+      <figure class="shot"><a href="/img/map.webp" target="_blank" rel="noopener" title="${esc(t.map.open)}"><img src="/img/map.webp" width="1239" height="760" loading="lazy" decoding="async" alt="${esc(t.map.alt1)}"></a></figure>
+      <figure class="shot"><a href="/img/map-search.webp" target="_blank" rel="noopener" title="${esc(t.map.open)}"><img src="/img/map-search.webp" width="1374" height="920" loading="lazy" decoding="async" alt="${esc(t.map.alt2)}"></a></figure>
     </div>
   </section>
 
@@ -198,7 +205,7 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
     ${label('work/m365')}
     <h2 id="h-m365" class="tile__title">${esc(t.m365.title)}</h2>
     <p class="tile__text">${esc(t.m365.text)}</p>
-    <p class="tile__text">${txt(t.m365.todo)}</p>
+    ${HIDE_TODO && isTodo(t.m365.todo) ? '' : `<p class="tile__text">${txt(t.m365.todo)}</p>`}
   </section>
 
   <section class="tile tile--lab" aria-labelledby="h-lab">
@@ -222,7 +229,7 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
     </figure>
   </section>
 
-  <section class="tile tile--gh" aria-labelledby="h-gh" data-gh data-lang="${t.lang}">
+  <section class="tile tile--gh gh--empty" aria-labelledby="h-gh" data-gh data-lang="${t.lang}">
     ${label('github')}
     <h2 id="h-gh" class="sr">${esc(t.gh.title)}</h2>
     <p class="gh__total"><b data-gh-total>—</b> <span>${esc(t.gh.contributions)}</span></p>
@@ -269,6 +276,8 @@ ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min
       <div class="form__foot">
         <button class="btn btn--accent" type="submit">${esc(t.contact.send)}</button>
         <p class="form__status" role="status" aria-live="polite" data-status></p>
+        <p class="form__status form__nojs" id="sent" data-state="ok">${esc(t.contact.ok)}</p>
+        <p class="form__status form__nojs" id="send-error" data-state="err">${esc(t.contact.err)}</p>
       </div>
     </form>
   </section>
@@ -291,6 +300,36 @@ for (const t of Object.values(LANGS)) {
   mkdirSync(dir, { recursive: true });
   writeFileSync(`${dir}/index.html`, page(t));
 }
+
+// Netlify serves /404.html for any unknown path. One bilingual page, same styles.
+writeFileSync(`${OUT}/404.html`, `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>404 — ${SITE.name}</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>${css}</style>
+</head>
+<body>
+<main class="bento bento--404">
+  <section class="tile tile--hero tile--404">
+    <div class="hero__grid" aria-hidden="true"></div>
+    <div class="hero__body">
+      <p class="hero__name">404</p>
+      <h1 class="hero__headline">This page doesn’t exist.</h1>
+      <p class="hero__sub" lang="bg">Тази страница не съществува.</p>
+      <div class="hero__actions">
+        <a class="btn btn--accent" href="/">Go to the homepage</a>
+        <a class="btn btn--ghost" href="/bg/" lang="bg">Към началото</a>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>`);
 
 writeFileSync(
   `${OUT}/sitemap.xml`,

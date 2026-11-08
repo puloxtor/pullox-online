@@ -18,15 +18,24 @@ async function ipKey(ip: string) {
 export default async (req: Request, context: Context) => {
   if (req.method !== 'POST') return json({ error: 'method' }, 405);
 
+  // The page sends JSON via fetch. Without JavaScript the browser posts the form itself
+  // (urlencoded); then we answer with a redirect back to the page and a #sent / #send-error anchor.
+  const isForm = (req.headers.get('content-type') || '').includes('application/x-www-form-urlencoded');
   let body: Record<string, string>;
   try {
     const raw = await req.text();
     if (raw.length > 20000) return json({ error: 'too_large' }, 413);
-    body = JSON.parse(raw);
+    body = isForm ? Object.fromEntries(new URLSearchParams(raw)) : JSON.parse(raw);
   } catch {
     return json({ error: 'bad_json' }, 400);
   }
+  const res = await handle(body, context);
+  if (!isForm) return res;
+  const page = body.lang === 'bg' ? '/bg/' : '/';
+  return new Response(null, { status: 303, headers: { location: page + (res.ok ? '#sent' : '#send-error'), 'cache-control': 'no-store' } });
+};
 
+async function handle(body: Record<string, string>, context: Context): Promise<Response> {
   // Honeypot: bots fill "company". Pretend success, send nothing.
   if ((body.company || '').trim()) return json({ ok: true });
 
@@ -68,4 +77,4 @@ export default async (req: Request, context: Context) => {
     return json({ error: 'send_failed' }, 502);
   }
   return json({ ok: true });
-};
+}

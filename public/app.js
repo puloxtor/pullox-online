@@ -13,6 +13,10 @@
       if (pipe.classList.contains('paused')) return;
       anim.forEach((el) => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
     });
+    // Don't burn CPU animating while the pipeline is off-screen.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => pipe.classList.toggle('offscreen', !e.isIntersecting)).observe(pipe);
+    }
     const btn = $('[data-pause]', pipe);
     btn.addEventListener('click', () => {
       const p = pipe.classList.toggle('paused');
@@ -36,6 +40,7 @@
         graph.innerHTML = '<i style="visibility:hidden"></i>'.repeat(first) +
           days.map((x) => `<i data-l="${x.l}" title="${x.c} · ${x.date}"></i>`).join('');
         $('[data-gh-total]', gh).textContent = Number(d.total || 0).toLocaleString(lang);
+        gh.classList.remove('gh--empty');
       } else {
         const note = $('[data-gh-note]', gh);
         note.textContent = note.dataset.pending;
